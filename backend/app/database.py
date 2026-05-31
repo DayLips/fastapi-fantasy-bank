@@ -15,6 +15,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base(DeclarativeBase):
     ...
 
+from .models import User, Account
+
 def get_db():
     db = SessionLocal()
     try:
