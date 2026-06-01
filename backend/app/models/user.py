@@ -21,12 +21,13 @@ class User(Base):
     last_name = Column(String(20), nullable=False, index=True)
     phone = Column(String(20), nullable=False)
     role = Column(Enum(UserRole), nullable=False, index=True, default=UserRole.CLIENT)
-    is_active = Column(Boolean, nullable=False)
-    is_verified = Column(Boolean, nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+    is_verified = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     accounts = relationship('Account', foreign_keys="Account.user_id", back_populates='user')
+    payments = relationship('Payment', foreign_keys='Payment.user_id', back_populates='payment')
 
     def __repr__(self):
         return f"User<id={self.id}, first_name={self.first_name}, second_name={self.second_name}, last_name={self.last_name}>"
