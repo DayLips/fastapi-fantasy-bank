@@ -28,6 +28,7 @@ class User(Base):
 
     accounts = relationship('Account', foreign_keys="Account.user_id", back_populates='user')
     payments = relationship('Payment', foreign_keys='Payment.user_id', back_populates='payment')
+    notifications = relationship('Notification', foreign_keys="Notification.user_id", back_populates='notification')
 
     def __repr__(self):
         return f"User<id={self.id}, first_name={self.first_name}, second_name={self.second_name}, last_name={self.last_name}>"
