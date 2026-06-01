@@ -15,6 +15,7 @@ class LoginHistory(Base):
     login_time = Column(DateTime, default=datetime.now, nullable=False, index=True)     # Время попытки входа
     logout_time = Column(DateTime, nullable=True)                                       # Время выхода (для расчета длительности сессии)
     success = Column(Boolean, default=False, index=True)                                # Успешный вход или нет
+    created_at = Column(DateTime, default=datetime.now)                                 # Дата лога
 
     user = relationship("User", back_populates='login_histories')
 
