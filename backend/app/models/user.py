@@ -1,8 +1,14 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum
 from sqlalchemy.orm import relationship
 from datetime import datetime
+import enum
 
 from ..database import Base
+
+class UserRole(enum.Enum):
+    CLIENT = "client"
+    ADMIN = "admin"
+    OPERATOR = "operator"
 
 class User(Base):
     __tablename__ = 'users'
@@ -14,7 +20,7 @@ class User(Base):
     second_name = Column(String(20), nullable=False, index=True)
     last_name = Column(String(20), nullable=False, index=True)
     phone = Column(String(20), nullable=False)
-    role = Column(String(10), nullable=False, index=True)
+    role = Column(Enum(UserRole), nullable=False, index=True, default=UserRole.CLIENT)
     is_active = Column(Boolean, nullable=False)
     is_verified = Column(Boolean, nullable=False)
     created_at = Column(DateTime, default=datetime.now)

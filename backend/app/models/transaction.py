@@ -1,8 +1,21 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime, Numeric
+from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime, Numeric, Enum
 from sqlalchemy.orm import relationship
 from datetime import datetime
+import enum
 
 from ..database import Base
+
+class TransactionType(enum.Enum):
+    TRANSFER = "transfer"
+    DEPOSIT = "deposit"
+    WITHDRAWAL = "withdrawal"
+    PAYMENT = "payment"
+
+class TransactionStatus(enum.Enum):
+    PENDING = "pending"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
 
 class Transaction(Base):
     __tablename__ = 'transactions'
@@ -13,8 +26,8 @@ class Transaction(Base):
     to_account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
     currency = Column(String, nullable=False)
-    type = Column(String(15), nullable=False, index=True, default='transfer')
-    status = Column(String(15), nullable=False, default="pending")
+    type = Column(Enum(TransactionType), nullable=False, index=True, default=TransactionType.TRANSFER)
+    status = Column(Enum(TransactionStatus), nullable=False, default=TransactionStatus.PENDING)
     description = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     completed_at = Column(DateTime)
