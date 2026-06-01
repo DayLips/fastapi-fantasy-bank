@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, DECIMAL, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from decimal import Decimal
@@ -10,14 +10,16 @@ class Account(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    account_number = Column(String, nullable=False)
-    balance = Column(DECIMAL(scale=2), default=Decimal('0.0'), nullable=False)
+    account_number = Column(String, nullable=False, unique=True)
+    balance = Column(Numeric(10, 2), default=Decimal('0.00'), nullable=False)
     currency = Column(String, nullable=False)
     is_active = Column(Boolean, nullable=False)
     created_at = Column(DateTime, default=datetime.now)
-    uploated_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = relationship("User", back_populates='accounts')
+    outgoing_transactions = relationship("Transaction", foreign_keys="Transaction.from_account_id", back_populates="from_account")
+    incoming_transactions = relationship("Transaction", foreign_keys="Transaction.to_account_id", back_populates="to_account")
 
     def __repr__(self):
         return f"Account<id={self.id}, account_number={self.account_number}, balance={self.balance}, currency={self.currency}>"
