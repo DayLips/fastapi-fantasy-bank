@@ -15,7 +15,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base(DeclarativeBase):
     ...
 
-from .models import Account, ATM, Card, ExchangeRate, Notification, Payment, Transaction, User
+from .models import User, Account, ATM, AuditLog, Card, ExchangeRate, LoginHistory, Notification, Payment, Transaction
 
 def get_db():
     db = SessionLocal()
